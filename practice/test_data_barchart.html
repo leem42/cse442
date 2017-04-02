@@ -13,11 +13,10 @@
         <script type="text/javascript">
         // width and height
 	        var svg = d3.select("svg");
-	        var margin = {top: 20, right: 20, bottom: 30, left: 40};
+	        var margin = {top: 20, right: 20, bottom: 30, left: 120};
    			var width = +svg.attr("width") - margin.left - margin.right;
    			var height = +svg.attr("height") - margin.top - margin.bottom;
    			var g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-	        
 	        var x0 = d3.scaleBand()
 	        .rangeRound([0, width])
 	        .paddingInner(0.1);
@@ -70,47 +69,53 @@
 		          .attr("class", "axis")
 		          .call(d3.axisLeft(y).ticks(null, "s"))
 		        .append("text")
-		          .attr("x", 2)
+		          .attr("x", 0)
 		          .attr("y", y(y.ticks().pop()) + 0.5)
 		          .attr("dy", "0.32em")
 		          .attr("fill", "#000")
+		          .style("font-size","20px")
 		          .attr("font-weight", "bold")
-		          .attr("text-anchor", "start")
-		          .text("Number Applied");
+		          .attr("text-anchor", "start");
+// 		          .text("Number Applicants");
 	
 		      svg.append("text")
-		        .attr("x", 450)             
+		        .attr("x", 500)             
 		        .attr("y", 50)
 		        .attr("text-anchor", "middle")  
 		        .style("font-size", "20px") 
-		        .style("font-family","Male and Female Admissions Applications and Total Acceptances")
+		        .style("font-family","sans-serif")
 		        .style("text-decoration", "underline")  
-		        .text("Value vs Date Graph");
+		        .text("Department Admissions by Sex");
 		    
 		      
-		      // Additional Block
-		      
 		      var legend = g.append("g")
-		          .attr("font-family", "sans-serif")
-		          .attr("font-size", 10)
-		          .attr("text-anchor", "end")
-		        .selectAll("g")
-		        .data(keys.slice().reverse())
-		        .enter().append("g")
-		          .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-	
-		      legend.append("rect")
-		          .attr("x", width - 19)
-		          .attr("width", 19)
-		          .attr("height", 19)
-		          .attr("fill", z);
-	
-		      legend.append("text")
-		          .attr("x", width - 24)
-		          .attr("y", 9.5)
-		          .attr("dy", "0.32em")
-		          .text(function(d) { return d; });
-		    	});
+	          .attr("font-family", "sans-serif")
+	          .attr("text-anchor", "end")
+	        .selectAll("g")
+	        .data(keys.slice().reverse())
+	        .enter().append("g")
+	          .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; })
+	          .attr("font-size",20);
+
+	      legend.append("rect")
+	          .attr("x", width - 19)
+	          .attr("y", 60)
+	          .attr("width", 19)
+	          .attr("height", 19)
+	          .attr("fill", z); 
+
+	      legend.append("text")
+	          .attr("x", width - 24)
+	          .attr("y", 70.5)
+	          .attr("dy", "0.32em")
+	          .text(function(d) { return "Rejected " + d ; })
+	          .attr("font-size",14);
+		      
+		    });
+		    
+		    
+		    
+		    
 		    // Additional Block
 		      var data2;
 		      d3.csv("http://localhost:8888/accepted_students.csv", 
@@ -124,6 +129,7 @@
 		      var keys = data2.columns.slice(1);
 		      var z = d3.scaleOrdinal()
 		        .range(["#0000ff", "#ff8c00"]);
+		      
 		      g.append("g")
 		        .selectAll("g")
 		        .data(data2)
@@ -138,7 +144,66 @@
 		          .attr("height", function(d) { return height - y(d.value); })
 		          .attr("fill", function(d) { 
 		        	  			return z(d.key); 	
-		          })});
+		          })
+		      
+		       // Additional Block
+			      
+		       	console.log(data2);	
+// 		      	dataSet = { "Female Accepted: ": 0000ff, "Female Rejected": 0000ff} ;
+		      
+// 			      var legend = g.append("g")
+// 			          .attr("font-family", "sans-serif")
+// 			          .attr("text-anchor", "end")
+// 			        .selectAll("g")
+// 			        .data(keys.slice().reverse())
+// 			        .enter().append("g")
+// 			          .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; })
+// 			          .attr("font-size",20);
+		
+// 			      legend.append("rect")
+// 			          .attr("x", width - 19)
+// 			          .attr("y", 60)
+// 			          .attr("width", 19)
+// 			          .attr("height", 19)
+// 			          .attr("fill", z); 
+		
+// 			      legend.append("text")
+// 			          .attr("x", width - 24)
+// 			          .attr("y", 70.5)
+// 			          .attr("dy", "0.32em")
+// 			          .text(function(d) { return "Accepted " + d ; })
+// 			          .attr("font-size",14);
+			      
+			      
+			   // Additional Block
+			      
+			      var legend = g.append("g")
+			          .attr("font-family", "sans-serif")
+			          .attr("text-anchor", "end")
+			        .selectAll("g")
+			        .data(keys.slice().reverse())
+			        .enter().append("g")
+			          .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; })
+			          .attr("font-size",20);
+		
+			      legend.append("rect")
+			          .attr("x", width - 19)
+			          .attr("y", 10)
+			          .attr("width", 19)
+			          .attr("height", 19)
+			          .attr("fill", z)
+			          .attr("padding",30); 
+		
+			      legend.append("text")
+			          .attr("x", width - 24)
+			          .attr("y", 20.5)
+			          .attr("dy", "0.32em")
+			          .text(function(d) { return "Accepted " + d ; })
+			          .attr("font-size",14);
+			      
+	    
+	     
+		      });
 		     // Additional Block
 
 		
